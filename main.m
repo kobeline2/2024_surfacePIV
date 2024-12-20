@@ -12,20 +12,26 @@ init
 
 %% read csv
 % fn = "dat/per1sec/dat0001.csv";
-dirPath = 'dat/per4sec';
+dirPath = '/Users/takahiro/Desktop/csv';
 % [d, coordX, coordY, columnNames] = readFlownizerCsv(fn); % signle csv
 [d, Meta] = readFlowNizerCsvSeq(dirPath); % sequential csv
 
 %% specify time
 % When the interval is n sec, T(1) shoud be (0+n)/2.
-T = 2:4:65; length(T) 
-T = 0.5:1:67; length(T) 
-Meta1.time = T';
+fps = 1/300;
+L = length(d);
+T = fps/2:fps:L*fps; length(T) 
+Meta.time = T';
 
 %% view data
 ind = 6;
 viewMovie(dValid, 2, Meta)
-viewVector(d, Meta, false)
+viewVector(d, Meta, false, 0.5)
+
+%% check mean vector
+d = d; Meta = Meta;
+meanV = nanmean(d, 4);
+viewVector(meanV, Meta, false, 0.3);
 
 %% resampling
 % d2 を T1 にリサンプリング
@@ -45,7 +51,4 @@ DO_INTERP = true;
 dValid = interpVector(d, TH_CORR, DO_INTERP);
 viewVector(dValid, Meta, false)
 
-%% check mean vector
-d = d2;
-meanV = nanmean(d, 4);
-viewVector(meanV, Meta, false);
+

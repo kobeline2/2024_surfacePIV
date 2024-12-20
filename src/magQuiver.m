@@ -1,6 +1,6 @@
-function q = magQuiver(X, Y, U, V, MAXC, CM)
+function q = magQuiver(X, Y, U, V, MAXC, CM, scale)
 
-q = quiver(X, Y, U, V, 3);
+q = quiver(X, Y, U, V, scale);
 colormap(CM)
 %// Compute the magnitude of the vectors
 mags = sqrt(sum(cat(2, q.UData(:), q.VData(:), ...

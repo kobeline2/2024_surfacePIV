@@ -8,15 +8,18 @@ fnList = fnList(~startsWith({fnList.name}, '.'));
 
 N = length(fnList);
 
-for I = 1:N
+% I = 1 (this treatment is for parfor)
+fn = fullfile(fnList(1).folder, fnList(1).name);
+[tmp, coordX, coordY, ~] = readFlownizerCsv(fn);
+d = zeros(length(coordX), length(coordY), length(COL_LIST), N); 
+d(:, :, :, 1) = tmp(:, :, COL_LIST);
+
+% I > 2
+parfor I = 2:N
     fn = fullfile(fnList(I).folder, fnList(I).name);
-    if I ~= 1
-        tmp = readFlownizerCsv(fn);
-    else
-        [tmp, coordX, coordY, ~] = readFlownizerCsv(fn);
-        d = zeros(length(coordX), length(coordY), length(COL_LIST), N);        
-    end
+    tmp = readFlownizerCsv(fn);
     d(:, :, :, I) = tmp(:, :, COL_LIST);
+    if mod(I, 100) == 0; fprintf("%d / %d finised \n", I, N); end
 end
 Meta = struct("coordX", coordX, "coordY", coordY);
 end
