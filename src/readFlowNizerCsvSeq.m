@@ -19,7 +19,7 @@ parfor I = 2:N
     fn = fullfile(fnList(I).folder, fnList(I).name);
     tmp = readFlownizerCsv(fn);
     d(:, :, :, I) = tmp(:, :, COL_LIST);
-    if mod(I, 100) == 0; fprintf("%d / %d finised \n", I, N); end
+    if mod(I, 100) == 0; fprintf("%d / %d finished \n", I, N); end
 end
 Meta = struct("coordX", coordX, "coordY", coordY);
 end

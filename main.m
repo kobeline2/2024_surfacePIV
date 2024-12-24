@@ -12,15 +12,14 @@ init
 
 %% read csv
 % fn = "dat/per1sec/dat0001.csv";
-dirPath = '/Users/takahiro/Desktop/csv';
+dirPath = '/Volumes/tk_main/selflining/PIV/case1_1/before/inner/csv';
 % [d, coordX, coordY, columnNames] = readFlownizerCsv(fn); % signle csv
 [d, Meta] = readFlowNizerCsvSeq(dirPath); % sequential csv
 
 %% specify time
 % When the interval is n sec, T(1) shoud be (0+n)/2.
 fps = 1/300;
-L = length(d);
-T = fps/2:fps:L*fps; length(T) 
+T = fps/2:fps:length(d)*fps; length(T) 
 Meta.time = T';
 
 %% view data
@@ -31,7 +30,7 @@ viewVector(d, Meta, false, 0.5)
 %% check mean vector
 d = d; Meta = Meta;
 meanV = nanmean(d, 4);
-viewVector(meanV, Meta, false, 0.3);
+viewVector(meanV, Meta, false, 1);
 
 %% resampling
 % d2 を T1 にリサンプリング
