@@ -12,9 +12,10 @@ init
 
 %% read csv
 % fn = "dat/per1sec/dat0001.csv";
-dirPath = '/Volumes/tk_main/selflining/PIV/case1_1/before/inner/csv';
+dirPathList = ["data/example/per1sec",...
+               "data/example/per4sec"];
 % [d, coordX, coordY, columnNames] = readFlownizerCsv(fn); % signle csv
-[d, Meta] = readFlowNizerCsvSeq(dirPath); % sequential csv
+[d, Meta] = readFlowNizerCsvSeq(dirPathList); % sequential csv
 
 %% specify time
 % When the interval is n sec, T(1) shoud be (0+n)/2.

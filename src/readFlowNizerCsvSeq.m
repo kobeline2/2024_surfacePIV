@@ -1,25 +1,34 @@
-function [d, Meta] = readFlowNizerCsvSeq(dirPath)
+function [d, Meta] = readFlowNizerCsvSeq(dirPathList)
 
 COL_LIST = [6, 7, 9]; % 6:u, 7:v, 9:corr
-
-dirPath = fullfile(dirPath, '*.csv');
-fnList = dir(dirPath);
-fnList = fnList(~startsWith({fnList.name}, '.'));
-
-N = length(fnList);
-
-% I = 1 (this treatment is for parfor)
-fn = fullfile(fnList(1).folder, fnList(1).name);
-[tmp, coordX, coordY, ~] = readFlownizerCsv(fn);
-d = zeros(length(coordX), length(coordY), length(COL_LIST), N); 
-d(:, :, :, 1) = tmp(:, :, COL_LIST);
-
-% I > 2
-parfor I = 2:N
-    fn = fullfile(fnList(I).folder, fnList(I).name);
-    tmp = readFlownizerCsv(fn);
-    d(:, :, :, I) = tmp(:, :, COL_LIST);
-    if mod(I, 100) == 0; fprintf("%d / %d finished \n", I, N); end
+nDir = length(dirPathList);
+for iDir = 1:nDir
+    dirPath = fullfile(dirPathList(iDir), '*.csv');
+    fnList = dir(dirPath);
+    fnList = fnList(~startsWith({fnList.name}, '.'));
+    
+    N = length(fnList);
+    
+    % I = 1 (this treatment is for parfor)
+    fn = fullfile(fnList(1).folder, fnList(1).name);
+    [tmp, coordX, coordY, ~] = readFlownizerCsv(fn);
+    dd = zeros(length(coordX), length(coordY), length(COL_LIST), N); 
+    dd(:, :, :, 1) = tmp(:, :, COL_LIST);
+    
+    % I > 2
+    parfor I = 2:N
+        fn = fullfile(fnList(I).folder, fnList(I).name);
+        tmp = readFlownizerCsv(fn);
+        dd(:, :, :, I) = tmp(:, :, COL_LIST);
+        if mod(I, 100) == 0
+            fprintf("dir No.%u %d / %d finished \n", iDir, I, N); 
+        end
+    end
+    if iDir == 1
+        d = dd;
+    else
+        d = cat(4, d, dd);
+    end
 end
 Meta = struct("coordX", coordX, "coordY", coordY);
 end
